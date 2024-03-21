@@ -1,4 +1,4 @@
-# ehr-llm-summarization
+# llm-ehr-summarization
 Electronic health record summarization with LLama and MIMIC-III dataset
 
 
