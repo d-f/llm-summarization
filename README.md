@@ -11,7 +11,7 @@ Neural Summarization of Electronic Health Records
 
 
 
-LLaMa2 access can be gained by applying at the following link:
+LLama2 access can be gained by applying at the following link:
 
 https://llama.meta.com/llama-downloads/
 
