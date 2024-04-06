@@ -1,10 +1,12 @@
 # llm-summarization
-Electronic health record summarization with LLama and MIMIC-III dataset
+TLDR dataset: 
+https://huggingface.co/datasets/webis/tldr-17
 
-
-https://mimic.mit.edu/docs/iii/
-
-
+RLHF dataset:
+from: https://github.com/openai/summarize-from-feedback
+```
+azcopy copy "https://openaipublic.blob.core.windows.net/summarize-from-feedback/dataset/*" . --recursive
+```
 
 potentially important paper: 
 Neural Summarization of Electronic Health Records
