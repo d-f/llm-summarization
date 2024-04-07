@@ -21,6 +21,11 @@ https://llama.meta.com/llama-downloads/
 git clone https://github.com/meta-llama/llama-recipes
 ```
 
+```
+cd ./llama-recipes
+pip install -e .
+```
+
 download.sh downloads a folder /llama-2-7b/ containing consolidated.00.pth.tar, params.JSON, tokenizer.JSON, tokenizer.model, tokenizer_config.JSON
 
 ```
