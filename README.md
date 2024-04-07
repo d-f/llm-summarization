@@ -38,7 +38,7 @@ with config.JSON, pytorch_model-000001-of-000003.bin, etc in /llama-2-7b/ move t
 
 in order to summarize text within example_prompt_1.txt (quantization for 8-bit precision)
 ```
-python inference.py --model_name llama-2-7b --prompt_file C:\personal_ML\llm-ehr-summarization\example_prompt_1.txt --quantization
+python inference.py --model_name llama-2-7b --prompt_file C:\personal_ML\llm_summarization\example_prompt_1.txt --quantization
 ```
 
 line 85 of /llama/llama/generation.py torch.distributed.init_process_group("nccl") -> torch.distributed.init_process_group("gloo") since nccl is not available on Windows
