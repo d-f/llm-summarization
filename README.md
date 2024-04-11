@@ -45,6 +45,10 @@ line 85 of /llama/llama/generation.py torch.distributed.init_process_group("nccl
 
 Random samples were taken from the TL;DR dataset and generated with the llama 2-7b prior to any finetuning:
 
+```
+python prefinetune_examples.py -save_path C:\\llm_summarization\\example_prompts\\ -num_ex 2
+```
+
 Prompt: 
 ````
 ### Instruction: Write a concise summary of the following text delimited by triple backquotes.
