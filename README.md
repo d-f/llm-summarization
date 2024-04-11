@@ -102,3 +102,11 @@ using the same images so often, and it gets a little tiresome.
 
 
 
+```
+python -m llama_recipes.finetuning --dataset "custom_dataset" --custom_dataset.file "examples/custom_dataset.py:custom_dataset" [TRAINING PARAMETERS]
+```
+
+
+
+
+
