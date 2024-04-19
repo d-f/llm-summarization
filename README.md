@@ -7,12 +7,6 @@ from: https://github.com/openai/summarize-from-feedback
 ```
 azcopy copy "https://openaipublic.blob.core.windows.net/summarize-from-feedback/dataset/*" . --recursive
 ```
-
-potentially important paper: 
-Neural Summarization of Electronic Health Records
-
-
-
 LLama2 access can be gained by applying at the following link:
 
 https://llama.meta.com/llama-downloads/
