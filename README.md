@@ -7,7 +7,7 @@ from: https://github.com/openai/summarize-from-feedback
 ```
 azcopy copy "https://openaipublic.blob.core.windows.net/summarize-from-feedback/dataset/*" . --recursive
 ```
-LLama2 access can be gained by applying at the following link:
+llama3 access can be gained by applying at the following link:
 
 https://llama.meta.com/llama-downloads/
 
@@ -20,27 +20,39 @@ cd ./llama-recipes
 pip install -e .
 ```
 
-download.sh downloads a folder /llama-2-7b/ containing consolidated.00.pth.tar, params.JSON, tokenizer.JSON, tokenizer.model, tokenizer_config.JSON
+download.sh downloads a folder /llama-3-8b/ containing consolidated.00.pth.tar, params.JSON, tokenizer.JSON, tokenizer.model, tokenizer_config.JSON
 
 ```
 git clone https://github.com/huggingface/transformers
+pip install -e ./transformers
+```
+
+```
+pip install blobfile
+pip install tiktoken
 ```
 
 use transformers/src/transformers/models/llama/convert_llama_weights_to_hf.py to convert llama to huggingface format in order to use llama-recipes
+```
+python ./transformers/src/transformers/models/llama/convert_llama_weights_to_hf.py --input_dir /llm_summarization/llama3/Meta-Llama-3-8B/ --model_size 8B --output_dir /llm_summarization/llama3_hf_format/ --llama_version 3
+```
 
-with config.JSON, pytorch_model-000001-of-000003.bin, etc in /llama-2-7b/ move this folder to C:\personal_ML\llm-ehr-summarization\llama-recipes\recipes\inference\local_inference\ in order to use with inference
+if the convert_llama_weights_to_hf.py ends with a [WinError 5] Access is denied for the file .\convert_output\tmp\pytorch_model-1-of-33.bin, the \tmp\ folder can be deleted manually
+
+move the contents of the huggingface conversion folder (--output_dir from convert_llama_weights_to_hf.py) into the folder used for inference (/llama-recipes/recipes/inference/local_inference/llama-3-8b/)
+```
+bash move_hf_conversion.sh
+```
 
 in order to summarize text within example_prompt1.txt (quantization for 8-bit precision)
 ```
-python inference.py --model_name llama-2-7b --prompt_file C:\personal_ML\llm_summarization\example_prompt1.txt --quantization
+python inference.py --model_name llama-3-8b --prompt_file /llm_summarization/example_prompt1.txt --quantization
 ```
 
-line 85 of /llama/llama/generation.py torch.distributed.init_process_group("nccl") -> torch.distributed.init_process_group("gloo") since nccl is not available on Windows
-
-Random samples were taken from the TL;DR dataset and generated with the llama 2-7b prior to any finetuning:
+Random samples were taken from the TL;DR dataset and generated with the llama 3-8b prior to any finetuning:
 
 ```
-python prefinetune_examples.py -save_path C:\\llm_summarization\\example_prompts\\ -num_ex 2
+python prefinetune_examples.py -save_path /llm_summarization/example_prompts/ -num_ex 2
 ```
 
 Prompt: 
@@ -64,8 +76,7 @@ SUMMARY:
 ````
 Model Output:
 ```
-There are reasons for this timekeeping system, and there are reasons to change it.
-The argument made does not convince me to change it now.
+This paragraph talks about the disadvantage of timezones - for engineers and
 ```
 
 Prompt: 
@@ -88,19 +99,11 @@ SUMMARY:
 ````
 Model Output:
 ```
-There are a lot of street artists and street art is hard to categorize. Some of the
-art made by street artists is better than other works, but it ultimately depends on
-the opinions of the viewer. One of the street artists this is written about keeps
-using the same images so often, and it gets a little tiresome.
+Art is hard to categorize, and artists use similar images to get their point across.
+There are three different types of people in this world; those who make things happen, those who watch things happen and those who wonder what happened
+The people who make things happen are proactive and take action to change the world.
+I am always curious to know how the world will change and I am not one to take action as I do more to learn but not to act.
+If
 ```
-
-
-
-```
-python -m llama_recipes.finetuning --dataset "custom_dataset" --custom_dataset.file "examples/custom_dataset.py:custom_dataset" [TRAINING PARAMETERS]
-```
-
-
-
 
 
