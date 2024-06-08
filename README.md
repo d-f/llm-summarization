@@ -2,12 +2,11 @@
 TLDR dataset: 
 https://huggingface.co/datasets/webis/tldr-17
 
-RLHF dataset:
-from: https://github.com/openai/summarize-from-feedback
+RLHF dataset: https://github.com/openai/summarize-from-feedback
 ```
 azcopy copy "https://openaipublic.blob.core.windows.net/summarize-from-feedback/dataset/*" . --recursive
 ```
-llama3 access can be gained by applying at the following link:
+Llama3 access can be gained by applying at the following link:
 
 https://llama.meta.com/llama-downloads/
 
@@ -20,7 +19,7 @@ cd ./llama-recipes
 pip install -e .
 ```
 
-download.sh downloads a folder /llama-3-8b/ containing consolidated.00.pth.tar, params.JSON, tokenizer.JSON, tokenizer.model, tokenizer_config.JSON
+Download.sh downloads a folder /llama-3-8b/ containing consolidated.00.pth.tar, params.JSON, tokenizer.JSON, tokenizer.model, tokenizer_config.JSON.
 
 ```
 git clone https://github.com/huggingface/transformers
@@ -32,19 +31,21 @@ pip install blobfile
 pip install tiktoken
 ```
 
-use transformers/src/transformers/models/llama/convert_llama_weights_to_hf.py to convert llama to huggingface format in order to use llama-recipes
+Use transformers/src/transformers/models/llama/convert_llama_weights_to_hf.py to convert llama to huggingface format in order to use llama-recipes.
 ```
 python ./transformers/src/transformers/models/llama/convert_llama_weights_to_hf.py --input_dir /llm_summarization/llama3/Meta-Llama-3-8B/ --model_size 8B --output_dir /llm_summarization/llama3_hf_format/ --llama_version 3
 ```
 
-if the convert_llama_weights_to_hf.py ends with a [WinError 5] Access is denied for the file .\convert_output\tmp\pytorch_model-1-of-33.bin, the \tmp\ folder can be deleted manually
+If the convert_llama_weights_to_hf.py ends with a [WinError 5] Access is denied for the file .\convert_output\tmp\pytorch_model-1-of-33.bin, the \tmp\ folder can be deleted manually.
 
-move the contents of the huggingface conversion folder (--output_dir from convert_llama_weights_to_hf.py) into the folder used for inference (/llama-recipes/recipes/inference/local_inference/llama-3-8b/)
+Move the contents of the huggingface conversion folder (--output_dir from convert_llama_weights_to_hf.py) into the folder used for inference (/llama-recipes/recipes/inference/local_inference/llama-3-8b/).
 ```
 bash move_hf_conversion.sh
 ```
 
-in order to summarize text within example_prompt1.txt (quantization for 8-bit precision)
+# Inference
+
+In order to summarize text within example_prompt1.txt (quantization for 8-bit precision).
 ```
 python inference.py --model_name llama-3-8b --prompt_file /llm_summarization/example_prompt1.txt --quantization
 ```
@@ -106,4 +107,4 @@ I am always curious to know how the world will change and I am not one to take a
 If
 ```
 
-
+# Fine tuning
