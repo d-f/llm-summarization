@@ -108,3 +108,14 @@ If
 ```
 
 # Fine tuning
+In order to format the TLDR dataset for using with TRL training pipelines:
+```
+python format_dataset.py -save_path /llm_summarization/tldr_dataset.jsonl
+```
+
+To fine-tune llama3 on the custom dataset:
+```
+python finetune.py -load_4bit -quant_type nf4 -dtype float16 -dbl_quant -model_dir /llm_summarization/llama3_hf_format/ -lora_a 32 -lora_drop 0.1 -r 8 -bias none -task_type CAUSAL_LM -target_mods q_proj v_proj -ds_json /llm_summarization/tldr_dataset.json -ds_txt_field prompt -output_dir /llm_summarization/training_output/ -batch_size 64 -bf16 -max_len 1024 -eval_strat epoch -do_eval
+```
+
+# RLHF
