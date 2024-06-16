@@ -107,7 +107,7 @@ I am always curious to know how the world will change and I am not one to take a
 If
 ```
 
-# Fine tuning
+# Supervised fine tuning
 In order to format the TLDR dataset for using with TRL training pipelines:
 ```
 python format_dataset.py -save_path /llm_summarization/tldr_dataset.jsonl
@@ -119,7 +119,7 @@ python finetune.py -load_4bit -quant_type nf4 -dtype float16 -dbl_quant -model_d
 ```
 
 # RLHF
-Reformat openAI data for PPO:
+Reformat openAI data for proximal policy optimization:
 ```
 python partition_openai.py -feedback_folder /llm_summarization/openai_RLHF_data/comparisons/ -val_prop 0.1 -save_folder /llm_summarization/openai_RLHF_data/ -train_filename train_feedback.json -val_filename val_feedback.json
 ```
