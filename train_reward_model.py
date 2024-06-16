@@ -33,7 +33,7 @@ def parse_cla():
 def quant_config(
         load_in_4bit:bool , bnb_4bit_quant_type:str, bnb_4bit_compute_dtype:str, 
         bnb_4bit_use_double_quant:bool
-        ) -> BitsAndBytesConfig:
+        ) -> Type[BitsAndBytesConfig]:
     """
     defines quantization configuration
     
@@ -43,7 +43,6 @@ def quant_config(
     bnb_4bit_compute_dtype -- data type for computation
     bnb_4bit_use_double_quant -- nested quantization
     """
-
     return BitsAndBytesConfig(
         load_in_4bit=load_in_4bit,
         bnb_4bit_quant_type=bnb_4bit_quant_type,
@@ -75,7 +74,6 @@ def preprocess(examples:Dict, tokenizer:Type[AutoTokenizer]) -> Dict:
         new_examples["attention_mask_chosen"].append(tokenized_chosen["attention_mask"])
         new_examples["input_ids_rejected"].append(tokenized_rejected["input_ids"])
         new_examples["attention_mask_rejected"].append(tokenized_rejected["attention_mask"])
-
     return new_examples
 
 
@@ -85,11 +83,10 @@ def prepare_datasets(train_ds, val_ds, tokenizer:Type[AutoTokenizer]) -> Tuple:
     """
     train_ds = train_ds.map(lambda x: preprocess(x, tokenizer=tokenizer), batched=True)
     val_ds = val_ds.map(lambda x: preprocess(x, tokenizer=tokenizer), batched=True)
-
     return train_ds, val_ds
 
 
-def prepare_tokenizer(model_folder, use_fast):
+def prepare_tokenizer(model_folder:str, use_fast:bool) -> Type[AutoTokenizer]:
     """
     prepares tokenizer by initializing AutoTokenizer and
     setting the pad_token as eos_token
@@ -99,7 +96,10 @@ def prepare_tokenizer(model_folder, use_fast):
     return tokenizer
 
 
-def prepare_model(model_folder, bnb_config):
+def prepare_model(
+        model_folder:str, 
+        bnb_config:Type[BitsAndBytesConfig]
+        ) -> Type[AutoModelForSequenceClassification]:
     """
     prepares a model by initializing AutoModelForSequenceClassification
     and setting the pad_token_id to the eos_token_is
