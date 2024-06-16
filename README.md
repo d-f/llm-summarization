@@ -119,3 +119,11 @@ python finetune.py -load_4bit -quant_type nf4 -dtype float16 -dbl_quant -model_d
 ```
 
 # RLHF
+Reformat openAI data for PPO:
+```
+python partition_openai.py -feedback_folder /llm_summarization/openai_RLHF_data/comparisons/ -val_prop 0.1 -save_folder /llm_summarization/openai_RLHF_data/ -train_filename train_feedback.json -val_filename val_feedback.json
+```
+In order to train the reward model:
+```
+python train_reward_model.py -model_folder /llm_summarization/llama3_hf_format/ -train_json /llm_summarization/openai_RLHF_dataset/train_feedback.json -val_json /llm_summarization/openai_RLHF_dataset/val_feedback.json -model_save_name /llm_summarization/model_1/ -r 8 -lora_a 32 -lora_dropout 0.1 -load_4bit -quant_type nf4 -dtype float16 -dbl_quant -lr 1e-3 -bf16 -max_len 128 -batch_size 2 -output_dir /llm_summarization/reward_output/ -target_mods q_proj v_proj
+```
