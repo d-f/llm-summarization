@@ -6,6 +6,9 @@ import json
 
 
 def parse_cla():
+    """
+    parses command-line arguments
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("-feedback_folder", type=Path)
     parser.add_argument("-val_prop", type=float)
@@ -16,6 +19,10 @@ def parse_cla():
 
 
 def open_ai_data(json_folder: Path) -> Dict:
+    """
+    reads all of the open ai JSON files and
+    results list of loaded json strings
+    """
     open_ai = []
     for folder_path in json_folder.iterdir():
         with open(folder_path) as opened_json:
@@ -27,11 +34,17 @@ def open_ai_data(json_folder: Path) -> Dict:
 
 
 def save_ds(json_data, json_path):
+    """
+    saves dataset
+    """
     with open(json_path, mode="w") as opened_json:
         json.dump(json_data, opened_json)
 
 
 def partition_ds(ds, val_prop):
+    """
+    partitions datset into train and validation partitions
+    """
     val_amt = int(len(ds)*val_prop)
     val_part = random.sample(ds, k=val_amt)
     train_part = [x for x in ds if x not in val_part]
