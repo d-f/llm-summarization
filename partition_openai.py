@@ -1,7 +1,7 @@
 import random
 import argparse
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Tuple
 import json
 
 
@@ -41,7 +41,7 @@ def save_ds(json_data, json_path):
         json.dump(json_data, opened_json)
 
 
-def partition_ds(ds, val_prop):
+def partition_ds(ds, val_prop) -> Tuple:
     """
     partitions datset into train and validation partitions
     """
