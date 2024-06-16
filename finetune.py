@@ -39,7 +39,7 @@ def quant_config(
     bnb_4bit_quant_type:str, 
     bnb_4bit_compute_dtype:str, 
     bnb_4bit_use_double_quant:bool
-) -> BitsAndBytesConfig:
+) -> Type[BitsAndBytesConfig]:
     """
     defines quantization configuration
     
