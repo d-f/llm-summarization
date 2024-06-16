@@ -10,7 +10,7 @@ import argparse
 def parse_cla():
     """parses command-line arguments"""
     parser = argparse.ArgumentParser()
-    parser.add_argument("-load_4bit", type=bool)
+    parser.add_argument("-load_4bit", action="store_true")
     parser.add_argument("-quant_type")
     parser.add_argument("-dtype")
     parser.add_argument("-dbl_quant", action="store_true")
@@ -20,7 +20,7 @@ def parse_cla():
     parser.add_argument("-r", type=int)
     parser.add_argument("-bias")
     parser.add_argument("-task_type")
-    parser.add_argument("-target_mods", type=list, nargs="+")
+    parser.add_argument("-target_mods", type=list, nargs="+", default=["q_proj", "v_proj"])
     parser.add_argument("-ds_json")
     parser.add_argument("-packing", action="store_true")
     parser.add_argument("-ds_txt_field")
@@ -30,16 +30,22 @@ def parse_cla():
     parser.add_argument("-max_len", type=int)
     parser.add_argument("-eval_strat")
     parser.add_argument("-do_eval", action="store_true")
+    parser.add_argument("-model_save_path")
     return parser.parse_args()
 
 
-def quant_config(load_in_4bit:bool , bnb_4bit_quant_type:str, bnb_4bit_compute_dtype:str, bnb_4bit_use_double_quant:bool) -> BitsAndBytesConfig:
+def quant_config(
+    load_in_4bit:bool, 
+    bnb_4bit_quant_type:str, 
+    bnb_4bit_compute_dtype:str, 
+    bnb_4bit_use_double_quant:bool
+) -> BitsAndBytesConfig:
     """
     defines quantization configuration
     
     keyword arguments:
     load_in_4bit -- 4-bit precision
-    bnb_4bit_quant_type -- quantizationd data type {nf4, fp4}
+    bnb_4bit_quant_type -- quantization data type {nf4, fp4}
     bnb_4bit_compute_dtype -- data type for computation
     bnb_4bit_use_double_quant -- nested quantization
     """
@@ -60,7 +66,14 @@ def causal_lm(model_dir:Path, quant_config:Type[BitsAndBytesConfig]) -> Type[Aut
     )
 
 
-def lora_config(lora_alpha:int, lora_dropout:float, r:int, bias:str, task_type:str, target_modules: List) -> Type[peft.LoraConfig]:
+def lora_config(
+    lora_alpha:int, 
+    lora_dropout:float, 
+    r:int, 
+    bias:str, 
+    task_type:str, 
+    target_modules: List
+) -> Type[peft.LoraConfig]:
     """
     defines lora configuration
 
@@ -116,7 +129,10 @@ def sft_config(
     )
 
 
-def train_model(model, dataset, s_config, eval_dataset):
+def train_model(
+        model: Type[AutoModelForCausalLM], dataset, s_config:Type[SFTConfig], 
+        eval_dataset, model_save_path:str
+        ):
     """trains model with SFTTrainer"""
     trainer = SFTTrainer(
         model,
@@ -125,6 +141,7 @@ def train_model(model, dataset, s_config, eval_dataset):
         args=s_config,
     )
     trainer.train()
+    trainer.save_model(model_save_path)
 
 
 def main():
@@ -150,14 +167,14 @@ def main():
 
     model = peft_model(model=model, l_config=l_config)
 
-    train_ds, val_ds, test_ds = load_dataset("json", data_files=args.ds_json, split=["train[:80%]", "train[80%:90%]", "train[90%:]"])
+    train_ds, val_ds = load_dataset("json", data_files=args.ds_json, split=["train[:90%]", "train[89%:100%]"])
 
     s_config = sft_config(
         packing=args.packing, dataset_text_field=args.ds_txt_field, output_dir=args.output_dir, 
         dataset_batch_size=args.batch_size, bf16=args.bf16, max_seq_len=args.max_len, eval_strat=args.eval_strat, do_eval=args.do_eval
         )
 
-    train_model(model=model, dataset=train_ds, eval_dataset=val_ds, s_config=s_config)
+    train_model(model=model, dataset=train_ds, eval_dataset=val_ds, s_config=s_config, model_save_path=args.model_save_path)
 
 
 if __name__ == "__main__":
