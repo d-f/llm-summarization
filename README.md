@@ -131,3 +131,14 @@ Align policy model with proximal policy optimization:
 ```
 python rlhf.py -ds_json /llm_summarization/openai_RLHF_data/train_feedback.json -tok_dir /llm_summarization/llama3_hf_format/ -model_save_path /llm_summarization/rlhf_model_1/ -lr 1e-5 -batch_size 1 -mini_batch_size 1 -load_4bit -quant-type nf4 -dtype float16 -dbl_quant -policy_dir /llm_summarization/sft_output/ -reward_dir /llm_summarization/reward_output/
 ```
+
+# RAG
+To retrieve from a database provided by langchain such as WikipediaLoader
+```
+python rag.py -wiki_query "dogs" -max_docs 100 -temp 0.2 -rep_pen 1.1 -max_new_tok 400 -num_ex 3 -chunk_size 512 -chunk_overlap 30 -llm_path /llm_summarization/llama3_hf_format/ -em_model_name BAAI/bge-base-en-v1.5 -tok_path /llm_summarization/llama3_hf_format/ -load_4bit -quant_type nf4 -dtpye float16 -dbl_quant
+```
+
+To retrieve from a custom database of .MD files located within a certain folder (e.g. /llm_summarization/md_files/)
+```
+python rag.py -custom_ds -md_dir /llm_summarization/md_files/ -max_docs 100 -temp 0.2 -rep_pen 1.1 -max_new_tok 400 -num_ex 3 -chunk_size 512 -chunk_overlap 30 -llm_path /llm_summarization/llama3_hf_format/ -em_model_name BAAI/bge-base-en-v1.5 -tok_path /llm_summarization/llama3_hf_format/ -load_4bit -quant_type nf4 -dtpye float16 -dbl_quant
+```
