@@ -1,4 +1,42 @@
 # llm-summarization
+# Prompt Engineering
+5 prompts were compared with 10 random examples from the TLDR dataset that were summarized by humans
+
+prompt_eng_templates.py was used in order to create Jinja2 templates, render the text and save .txt file input and output examples
+
+folder_inference.py was adapted from llama-recipes inference.py but was changed to predict all text files within a folder more efficiently
+
+compare_prompt_outputs.py was used to measure the following metrics of the llama-3-8B summarization results with 5 different prompts
+
+ROUGE-1
+| Prompt   | Precision | Recall | F1    | 
+| -------- | --------- | ------ | ----- |
+| Prompt 1 | 0.092     | 0.307  | 0.136 |
+| Prompt 2 | 0.125     | 0.370  | 0.178 |
+| Prompt 3 | 0.107     | 0.307  | 0.145 |
+| Prompt 4 | 0.093     | 0.216  | 0.112 |
+| Prompt 5 | 0.113     | 0.301  | 0.153 |
+
+ROUGE-2
+| Prompt   | Precision | Recall | F1    | 
+| -------- | --------- | ------ | ----- |
+| Prompt 1 | 0.005     | 0.028  | 0.009 |
+| Prompt 2 | 0.016     | 0.065  | 0.025 |
+| Prompt 3 | 0.004     | 0.012  | 0.006 |
+| Prompt 4 | 0.008     | 0.022  | 0.012 |
+| Prompt 5 | 0.010     | 0.030  | 0.015 |
+
+ROUGE-L
+| Prompt   | Precision | Recall | F1    | 
+| -------- | --------- | ------ | ----- |
+| Prompt 1 | 0.059     | 0.201  | 0.088 |
+| Prompt 2 | 0.078     | 0.245  | 0.113 |
+| Prompt 3 | 0.068     | 0.202  | 0.093 |
+| Prompt 4 | 0.056     | 0.129  | 0.071 |
+| Prompt 5 | 0.075     | 0.204  | 0.100 |
+
+Despite the very low scores due to the smallest llama model being used with 8-bit quantization, the second prompt shows higher results.
+
 TLDR dataset: 
 https://huggingface.co/datasets/webis/tldr-17
 
